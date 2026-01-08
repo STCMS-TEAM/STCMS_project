@@ -1,1 +1,29 @@
+name: Build Monolithic Image
 
+on:
+  repository_dispatch:
+    types: [trigger-build]  # This is the custom "signal" name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main Repo
+        uses: actions/checkout@v4
+
+      - name: Checkout Frontend
+        uses: actions/checkout@v4
+        with:
+          repository: your-username/frontend-repo
+          path: frontend # Puts code in /frontend folder
+
+      - name: Checkout Backend
+        uses: actions/checkout@v4
+        with:
+          repository: your-username/backend-repo
+          path: backend # Puts code in /backend folder
+
+      - name: Build Docker Image
+        run: |
+          docker build -t my-monolith-app:latest .
+          # Optional: add steps here to push to Docker Hub
