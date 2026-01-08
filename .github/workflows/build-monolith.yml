@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Frontend
         uses: actions/checkout@v4
         with:
-          repository: your-username/frontend-repo
+          repository: tomislav98/STCMS_frontend
           path: frontend # Puts code in /frontend folder
 
       - name: Checkout Backend
