@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # --- Service 1: The App (NestJS + Angular) ---
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: stcms_monolith
+    ports:
+      - "3000:3000"
+    environment:
+      # We use 'database' (the service name below) as the host
+      - MONGO_URI=mongodb://database:27017/stcms_db
+      - NODE_ENV=production
+    depends_on:
+      - database
+    restart: always
+
+  # --- Service 2: The Database (MongoDB) ---
+  database:
+    image: mongo:latest
+    container_name: stcms_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+# --- Volumes for Permanent Data ---
+volumes:
+  mongo_data:
