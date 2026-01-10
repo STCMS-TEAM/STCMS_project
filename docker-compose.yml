@@ -1,8 +1,7 @@
 version: '3.8'
-
 services:
-  # --- Service 1: The App (NestJS + Angular) ---
   api:
+    image: ghcr.io/tomislav98/STCMS_project:latest
     build: 
       context: .
       dockerfile: Dockerfile
@@ -10,23 +9,26 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # We use 'database' (the service name below) as the host
       - MONGO_URI=mongodb://database:27017/stcms_db
       - NODE_ENV=production
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     restart: always
 
-  # --- Service 2: The Database (MongoDB) ---
   database:
     image: mongo:latest
     container_name: stcms_mongodb
     ports:
       - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - mongo_data:/data/db
     restart: always
 
-# --- Volumes for Permanent Data ---
 volumes:
   mongo_data:
