@@ -1,9 +1,15 @@
 # --- STAGE 1: Build Angular ---
 FROM node:18-alpine AS frontend-builder
 WORKDIR /build/frontend
+
+# Copy package files from the subfolder to the container root
 COPY frontend/STCMS_app/package*.json ./
 RUN npm install
+
+# Copy everything else from the subfolder
 COPY frontend/STCMS_app/ ./
+
+# Run build - If this fails, check if 'src' folder is actually in STCMS_app
 RUN npm run build -- --configuration=production
 
 # --- STAGE 2: Build NestJS ---
