@@ -9,8 +9,8 @@ COPY frontend/ ./
 WORKDIR /build/frontend/STCMS_app
 
 # 3. Now run the commands inside that specific folder
-RUN npm install
 RUN npm ci
+RUN npm run build
 
 # --- STAGE 2: Build NestJS ---
 FROM node:22.20.0-slim AS backend-builder
