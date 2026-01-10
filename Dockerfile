@@ -30,8 +30,7 @@ ENV NODE_ENV=production
 # Copy Backend
 COPY --from=backend-builder /build/backend/dist ./dist
 COPY --from=backend-builder /build/backend/node_modules ./node_modules
-COPY --from=backend-builder /build/backend/package*.json ./
-/build/frontend/STCMS_app/dist/STCMS_app/browser"
+
 # Copy Frontend (The /browser part is the most common fix needed)
 # Try /dist/STCMS_app/browser first if /dist/STCMS_app doesn't work
 COPY --from=frontend-builder /build/frontend/STCMS_app/STCMS_app/dist/STCMS_app/browser ./client
