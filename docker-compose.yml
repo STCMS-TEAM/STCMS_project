@@ -1,16 +1,25 @@
 version: '3.8'
 services:
   api:
-    image: ghcr.io/tomislav98/STCMS_project:latest
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/stcms-team/STCMS_project:latest
     container_name: stcms_monolith
+    links:
+      -"database"
     ports:
       - "3000:3000"
     environment:
+      - SERVER_DEV_PORT=8000
+      - MONGO_PORT=27017
+      - MONGO_USERNAME=admin
+      - MONGO_PASSWORD=supersecret123
       - MONGO_URI=mongodb://database:27017/stcms_db
       - NODE_ENV=production
+      - ADMIN_EMAIL=admin@tournament.com
+      - ADMIN_PASSWORD=Admin123!
+      - ADMIN_NAME=Default
+      - ADMIN_LASTNAME=Admin
+      - JWT_SECRET=680we8FgErb/Pi47L0aj2dDqOIq8WNqFKYv38bq7iPs=
+      - NODE_ENV=dev
     depends_on:
       database:
         condition: service_healthy
