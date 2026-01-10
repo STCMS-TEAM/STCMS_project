@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Frontend
         uses: actions/checkout@v4
         with:
-          repository: tomislav98/STCMS_frontend
+          repository: STCMS-TEAM/STCMS_frontend
           path: frontend
           token: ${{ secrets.MONO_TOKEN }}
 
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout Backend
         uses: actions/checkout@v4
         with:
-          repository: tomislav98/STCMS_Backend
+          repository: STCMS-TEAM/STCMS_Backend
           path: backend
           token: ${{ secrets.MONO_TOKEN }}
           ref: master
