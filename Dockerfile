@@ -1,14 +1,9 @@
+# --- STAGE 1: Build Angular ---
 FROM node:18-alpine AS frontend-builder
 WORKDIR /build/frontend
-
-# 1. Reach into the subfolder for the package files
 COPY frontend/STCMS_app/package*.json ./
 RUN npm install
-
-# 2. Copy everything from that subfolder into the container
 COPY frontend/STCMS_app/ ./
-
-# 3. Run the build (this creates the /dist folder)
 RUN npm run build -- --configuration=production
 
 # --- STAGE 2: Build NestJS ---
@@ -23,14 +18,19 @@ RUN npm run build
 FROM node:18-alpine
 WORKDIR /app
 
+# Set production environment
+ENV NODE_ENV=production
+
+# Copy Backend
 COPY --from=backend-builder /build/backend/dist ./dist
 COPY --from=backend-builder /build/backend/node_modules ./node_modules
 COPY --from=backend-builder /build/backend/package*.json ./
 
-# --- CRITICAL PATH ADJUSTMENT ---
-# Angular builds to dist/[app-name]. 
-# Since your folder is STCMS_app, the build usually goes to dist/STCMS_app
-COPY --from=frontend-builder /build/frontend/dist/STCMS_app ./client
+# Copy Frontend (The /browser part is the most common fix needed)
+# Try /dist/STCMS_app/browser first if /dist/STCMS_app doesn't work
+COPY --from=frontend-builder /build/frontend/dist/STCMS_app/browser ./client
 
 EXPOSE 3000
+
+# Start the NestJS server
 CMD ["node", "dist/main"]
