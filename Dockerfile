@@ -2,14 +2,14 @@
 FROM node:18-alpine AS frontend-builder
 WORKDIR /build/frontend
 
-# Copy package files from the subfolder to the container root
-COPY frontend/STCMS_app/package*.json ./
+# 1. Copy the WHOLE frontend folder (maintaining the STCMS_app structure)
+COPY frontend/ ./
+
+# 2. Move into the actual app folder where package.json lives
+WORKDIR /build/frontend/STCMS_app
+
+# 3. Now run the commands inside that specific folder
 RUN npm install
-
-# Copy everything else from the subfolder
-COPY frontend/STCMS_app/ ./
-
-# Run build - If this fails, check if 'src' folder is actually in STCMS_app
 RUN npm run build -- --configuration=production
 
 # --- STAGE 2: Build NestJS ---
