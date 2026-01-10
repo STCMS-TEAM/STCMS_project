@@ -36,6 +36,7 @@ jobs:
           repository: tomislav98/STCMS_Backend
           path: backend
           token: ${{ secrets.MONO_TOKEN }}
+          ref: master
 
       # 4. Log in to GitHub Container Registry to save the image
       - name: Log in to GHCR
