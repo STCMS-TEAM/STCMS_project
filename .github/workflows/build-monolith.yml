@@ -54,4 +54,4 @@ jobs:
           push: true
           # This saves the image under your Main Repo's "Packages" section
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+            ghcr.io/stcms-team/stcms_project:latest
