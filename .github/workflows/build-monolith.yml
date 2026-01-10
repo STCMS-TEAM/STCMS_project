@@ -6,6 +6,8 @@ on:
     types: [trigger-build]
   # This lets you run it manually from the Actions tab for testing
   workflow_dispatch:
+  push:
+    branches: [ main, master ]
 
 jobs:
   assemble-and-build:
