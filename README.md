@@ -1,4 +1,4 @@
-```markdown
+
 # STCMS - Tournament Management System
 
 This repository contains a full-stack tournament management system containerized with Docker. It features a **NestJS** backend, an **Angular** frontend, and a **MongoDB** database.
@@ -15,7 +15,7 @@ To ensure the Docker build works correctly, please keep the following structure:
 ├── docker-compose.yml   # Orchestration for API and Mongo
 └── .env                 # Environment variables (to be created)
 
-```
+
 
 ---
 
