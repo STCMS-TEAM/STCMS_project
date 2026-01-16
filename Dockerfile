@@ -1,38 +1,54 @@
-# --- STAGE 1: Preparazione Frontend ---
-FROM node:22.20.0-slim AS frontend-base
-WORKDIR /app/frontend
-COPY frontend/ ./
-WORKDIR /app/frontend/STCMS_app
-RUN npm ci
 
-# --- STAGE 2: Preparazione Backend ---
-FROM node:22.20.0-slim AS backend-base
-WORKDIR /app/backend
-COPY backend/package*.json ./
+# --- Stage 1: Build Angular ---
+
+FROM node:20-alpine AS angular-build
+
+WORKDIR /app/frontend
+
+COPY STCMS_frontend/STCMS_app/package*.json ./
+
 RUN npm install
-COPY backend/ ./
+
+COPY STCMS_frontend/STCMS_app/ ./
+
+RUN npm run build -- --configuration production
+
+
+
+# --- Stage 2: Build NestJS ---
+
+FROM node:20-alpine AS nest-build
+
+WORKDIR /app/backend
+
+COPY STCMS_Backend/package*.json ./
+
+RUN npm install
+
+COPY STCMS_Backend/ ./
+
+# Copy Angular build to a temp location
+
+COPY --from=angular-build /app/frontend/dist/STCMS_app/browser /app/browser
+
 RUN npm run build
 
-# --- STAGE 3: Immagine Finale ---
-FROM node:22.20.0-slim
+
+
+# --- Stage 3: Run ---
+
+FROM node:20-alpine
+
 WORKDIR /app
 
-# Installiamo 'concurrently' per gestire due processi Node insieme
-RUN npm install -g concurrently
+COPY --from=nest-build /app/backend/dist ./dist
 
-# Copiamo tutto dai vari stage
-COPY --from=frontend-base /app/frontend /app/frontend
-COPY --from=backend-base /app/backend /app/backend
+COPY --from=nest-build /app/backend/node_modules ./node_modules
 
-# Espone le porte
-EXPOSE 4200
+COPY --from=nest-build /app/browser ./browser
+
+
+
 EXPOSE 3000
 
-# Variabili d'ambiente di default (possono essere sovrascritte al run)
-ENV NODE_ENV=dev
-
-# Comando per lanciare ENTRAMBI i server
-# --host 0.0.0.0 è OBBLIGATORIO per Angular in Docker per essere visto dall'esterno
-CMD ["concurrently", \
-    "cd /app/frontend/STCMS_app && npm run start -- --host 0.0.0.0 --port 8080", \
-    "cd /app/backend && node dist/main"]
+CMD ["node", "dist/main.js"]
