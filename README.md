@@ -1,9 +1,3 @@
-Here is the complete **README.md** file tailored specifically for your folder structure. I have added clear sections so your friends (or anyone on GitHub) can get the project running in minutes.
-
-You can copy the block below and save it as `README.md`.
-
----
-
 ```markdown
 # STCMS - Tournament Management System
 
