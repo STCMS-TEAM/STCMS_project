@@ -32,12 +32,12 @@ Create a file named `.env` in the root folder and paste the following template. 
 ```env
 # --- Server Configuration ---
 SERVER_DEV_PORT=8000
-NODE_ENV=production
-JWT_SECRET=your_super_secret_key_change_this
+NODE_ENV=dev
+JWT_SECRET=hpZKnv0Bfm7lybvg8qvzUM6mHxvzeFLfBmR9g3DpM+I=
 
 # --- MongoDB Configuration ---
-MONGO_USERNAME=stcms_user
-MONGO_PASSWORD=stcms_password
+MONGO_USERNAME=Admin
+MONGO_PASSWORD=password123
 MONGO_PORT=27017
 
 # --- Initial Admin Setup ---
